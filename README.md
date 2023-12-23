@@ -12,7 +12,8 @@ SnippetPad enables users to test code snippets in multiple programming languages
     * If execution is taking too long, or perhaps is hung, click the `Stop ■` button to cancel execution.
 1. See the results of the execution in the bottom half of the window.
 
-[!NOTE] At the moment only CSharp is supported. Python and Javascript support will come later.
+> [!WARNING]
+> At the moment only CSharp is supported. Python and Javascript support will come later.
 
 ## Version History
 
