@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SnippetRunner": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
