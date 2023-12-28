@@ -12,6 +12,7 @@ internal class JavaScriptRunner
         {
             using (var engine = new V8ScriptEngine())
             {
+                engine.AddHostType("Console", typeof(Console));
                 var result = engine.Evaluate(snippet);
                 returnValue = result?.ToString() ?? "null";
             }

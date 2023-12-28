@@ -12,7 +12,7 @@ internal class PythonRunner
             var scope = engine.CreateScope();
             var script = engine.CreateScriptSourceFromString(snippet);
             var result = script.Execute(scope);
-            returnValue = result;
+            returnValue = result?.ToString() ?? "null";
         }
         catch (Exception ex)
         {
