@@ -14,6 +14,8 @@ internal static class RunnerSelector
                 return PythonRunner.RunSnippet;
             case "javascript":
                 return JavaScriptRunner.RunSnippet;
+            case "lua":
+                return LuaRunner.RunSnippet;
             default:
                 throw new NotSupportedException($"{language} is not a supported language.");
         }

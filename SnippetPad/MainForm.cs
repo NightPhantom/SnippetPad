@@ -1,7 +1,3 @@
-using System;
-using System.Diagnostics;
-using static Community.CsharpSqlite.Sqlite3;
-
 namespace SnippetPad
 {
     public partial class MainForm : Form
@@ -56,7 +52,7 @@ namespace SnippetPad
         /// <returns></returns>
         private async Task RunSnippet(string codeSnippet, string language, CancellationToken ct)
         {
-            var  progress = new Progress<string>();
+            var progress = new Progress<string>();
             progress.ProgressChanged += (s, msg) =>
             {
                 // Update the result on progress
@@ -185,6 +181,8 @@ namespace SnippetPad
                     return "py";
                 case "javascript":
                     return "js";
+                case "lua":
+                    return "lua";
                 default:
                     return "txt";
             }
@@ -205,6 +203,8 @@ namespace SnippetPad
                     return "Python files|*.py|All Files|*.*";
                 case "javascript":
                     return "Javascript files|*.js|All Files|*.*";
+                case "lua":
+                    return "Lua files|*.lua|All Files|*.*";
                 default:
                     return "Text files|*.txt|All Files|*.*";
             }

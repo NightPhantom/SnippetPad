@@ -14,6 +14,8 @@ SnippetPad enables users to test code snippets in multiple programming languages
 
 ## Version History
 
+* 1.0.1
+    * Added Lua support.
 * 1.0.0
     * Initial Release with support for CSharp, Python, and JavaScript.
 

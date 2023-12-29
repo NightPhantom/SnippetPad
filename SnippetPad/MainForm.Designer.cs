@@ -94,7 +94,7 @@
             // 
             toolStripComboBoxLanguage.DropDownStyle = ComboBoxStyle.DropDownList;
             toolStripComboBoxLanguage.FlatStyle = FlatStyle.Standard;
-            toolStripComboBoxLanguage.Items.AddRange(new object[] { "CSharp", "JavaScript", "Python" });
+            toolStripComboBoxLanguage.Items.AddRange(new object[] { "CSharp", "JavaScript", "Lua", "Python" });
             toolStripComboBoxLanguage.Name = "toolStripComboBoxLanguage";
             toolStripComboBoxLanguage.Size = new Size(121, 25);
             toolStripComboBoxLanguage.Sorted = true;
