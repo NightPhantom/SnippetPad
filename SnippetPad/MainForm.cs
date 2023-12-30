@@ -84,11 +84,24 @@
         /// <example>1 hour, 2 minutes, 3 seconds</example>
         private string FormatTimeSpanForStatus(TimeSpan timeSpan)
         {
+            if (timeSpan.Days > 0)
+            {
+                return "over a day";
+            }
+
             string hours = timeSpan.Hours > 0 ? $"{timeSpan.Hours} {(timeSpan.Hours == 1 ? "hour" : "hours")}" : string.Empty;
             string minutes = timeSpan.Minutes > 0 ? $"{timeSpan.Minutes} {(timeSpan.Minutes == 1 ? "minute" : "minutes")}" : string.Empty;
             string seconds = timeSpan.Seconds > 0 ? $"{timeSpan.Seconds} {(timeSpan.Seconds == 1 ? "second" : "seconds")}" : string.Empty;
             string[] components = { hours, minutes, seconds };
-            return string.Join(", ", components.Where(s => !string.IsNullOrEmpty(s)));
+
+            if (components.Any(s => !string.IsNullOrEmpty(s)))
+            {
+                return string.Join(", ", components.Where(s => !string.IsNullOrEmpty(s)));
+            }
+            else
+            {
+                return "less than a second";
+            }
         }
 
         /// <summary>
