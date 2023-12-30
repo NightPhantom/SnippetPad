@@ -1,4 +1,4 @@
-namespace SnippetPad
+﻿namespace SnippetPad
 {
     public partial class MainForm : Form
     {
@@ -20,14 +20,13 @@ namespace SnippetPad
         private async void toolStripButtonRun_Click(object sender, EventArgs e)
         {
             cancellationTokenSource = new CancellationTokenSource();
-            var ct = cancellationTokenSource.Token;
 
             SetUIRunning();
 
             try
             {
                 var codeSnippet = textBoxCodeSnippet.Text;
-                await RunSnippet(codeSnippet, toolStripComboBoxLanguage.Text, ct);
+                await RunSnippet(codeSnippet, toolStripComboBoxLanguage.Text, cancellationTokenSource);
             }
             catch (OperationCanceledException canceledException)
             {
@@ -48,9 +47,9 @@ namespace SnippetPad
         /// </summary>
         /// <param name="codeSnippet">The snippet of code that we want to run.</param>
         /// <param name="language">The language selected.</param>
-        /// <param name="ct">A cancellation token that we can use to stop execution.</param>
+        /// <param name="cts">A cancellation token source that we can use to stop execution.</param>
         /// <returns></returns>
-        private async Task RunSnippet(string codeSnippet, string language, CancellationToken ct)
+        private async Task RunSnippet(string codeSnippet, string language, CancellationTokenSource cts)
         {
             var progress = new Progress<string>();
             progress.ProgressChanged += (s, msg) =>
@@ -59,10 +58,72 @@ namespace SnippetPad
                 textBoxExecutionResult.AppendText($"{msg}{Environment.NewLine}");
             };
 
+            var activityIndicatorTask = Task.Run(() => IndicateActivity(language, cts.Token));
+
             await Task.Run(async () =>
             {
-                await Runner.RunSnippet(codeSnippet, language, progress, ct);
-            }, ct);
+                var startTime = DateTime.Now;
+
+                // Run the snippet
+                await Runner.RunSnippet(codeSnippet, language, progress, cts.Token);
+
+                // Stop activity indicator
+                cts.Cancel();
+                await activityIndicatorTask;
+
+                // Report the time it took to run
+                toolStripStatusLabel.Text = $"{language} snippet executed in {FormatTimeSpanForStatus(DateTime.Now - startTime)}";
+            }, cts.Token);
+        }
+
+        /// <summary>
+        /// Create a string in a user friendly format to represent the time span provided.
+        /// </summary>
+        /// <param name="timeSpan">The time we want to format.</param>
+        /// <returns>A string in a user friendly format indicating the hours, minutes, and seconds for the time span provided.</returns>
+        /// <example>1 hour, 2 minutes, 3 seconds</example>
+        private string FormatTimeSpanForStatus(TimeSpan timeSpan)
+        {
+            string hours = timeSpan.Hours > 0 ? $"{timeSpan.Hours} {(timeSpan.Hours == 1 ? "hour" : "hours")}" : string.Empty;
+            string minutes = timeSpan.Minutes > 0 ? $"{timeSpan.Minutes} {(timeSpan.Minutes == 1 ? "minute" : "minutes")}" : string.Empty;
+            string seconds = timeSpan.Seconds > 0 ? $"{timeSpan.Seconds} {(timeSpan.Seconds == 1 ? "second" : "seconds")}" : string.Empty;
+            string[] components = { hours, minutes, seconds };
+            return string.Join(", ", components.Where(s => !string.IsNullOrEmpty(s)));
+        }
+
+        /// <summary>
+        /// Displays text and activity spinner in status bar.
+        /// </summary>
+        /// <param name="language">The language currently being executed.</param>
+        /// <param name="ct">The cancellation request token to stop displaying activity.</param>
+        private async Task IndicateActivity(string language, CancellationToken ct)
+        {
+            var baseStatus = $"Executing {language} snippet";
+            var activityIndicator = "-";
+            while (!ct.IsCancellationRequested)
+            {
+                toolStripStatusLabel.Text = $"{baseStatus} {activityIndicator}";
+                switch (activityIndicator)
+                {
+                    case "-":
+                        activityIndicator = "\\";
+                        break;
+                    case "\\":
+                        activityIndicator = "|";
+                        break;
+                    case "|":
+                        activityIndicator = "/";
+                        break;
+                    case "/":
+                        activityIndicator = "-";
+                        break;
+                    default:
+                        break;
+                }
+                Thread.Sleep(100);
+            }
+            toolStripStatusLabel.Text = string.Empty;
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -103,6 +164,7 @@ namespace SnippetPad
             toolStripButtonStop_Click(sender, e);
             textBoxCodeSnippet.Text = string.Empty;
             textBoxExecutionResult.Text = string.Empty;
+            toolStripStatusLabel.Text = string.Empty;
         }
 
         #region Open/save

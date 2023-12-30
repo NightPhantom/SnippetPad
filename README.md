@@ -14,6 +14,8 @@ SnippetPad enables users to test code snippets in multiple programming languages
 
 ## Version History
 
+* 1.0.2
+    * Added activity indicator and execution time to status bar.
 * 1.0.1
     * Added Lua support.
 * 1.0.0

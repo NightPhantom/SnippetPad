@@ -43,11 +43,13 @@
             toolStripMenuItemHelp = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             statusStripMain = new StatusStrip();
+            toolStripStatusLabel = new ToolStripStatusLabel();
             openFileDialog = new OpenFileDialog();
             saveFileDialog = new SaveFileDialog();
             splitContainer = new SplitContainer();
             toolStripMain.SuspendLayout();
             menuStripMain.SuspendLayout();
+            statusStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
             splitContainer.Panel2.SuspendLayout();
@@ -170,11 +172,19 @@
             // 
             // statusStripMain
             // 
+            statusStripMain.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel });
             statusStripMain.Location = new Point(0, 566);
             statusStripMain.Name = "statusStripMain";
             statusStripMain.Size = new Size(919, 22);
             statusStripMain.TabIndex = 5;
             statusStripMain.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel
+            // 
+            toolStripStatusLabel.Font = new Font("Cascadia Mono", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            toolStripStatusLabel.Name = "toolStripStatusLabel";
+            toolStripStatusLabel.Size = new Size(873, 17);
+            toolStripStatusLabel.Spring = true;
             // 
             // openFileDialog
             // 
@@ -219,6 +229,8 @@
             toolStripMain.PerformLayout();
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
+            statusStripMain.ResumeLayout(false);
+            statusStripMain.PerformLayout();
             splitContainer.Panel1.ResumeLayout(false);
             splitContainer.Panel1.PerformLayout();
             splitContainer.Panel2.ResumeLayout(false);
@@ -248,5 +260,6 @@
         private OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
         private SplitContainer splitContainer;
+        private ToolStripStatusLabel toolStripStatusLabel;
     }
 }
